@@ -1086,12 +1086,7 @@ class ComposedParameter(SerializableMixin, BaseComposedParameter):
             raise BreakingAPIChangeError(msg)
         takes_no_params = False
         if unpack_params is None:
-            parameters_with_keyword_only = signature(func).parameters.values()
-            parameters = {
-                parameter.name: parameter
-                for parameter in parameters_with_keyword_only
-                if parameter.kind != parameter.KEYWORD_ONLY
-            }
+            parameters = signature(func).parameters
             if isinstance(params, ZfitParameter):
                 params = [params]
                 unpack_params = True
