@@ -1058,8 +1058,14 @@ class ComposedParameter(SerializableMixin, BaseComposedParameter):
             dtype: Output of `func` dtype
             label: |@doc:param.init.label||@docend:param.init.label|
             unpack_params: If True, the parameters will be unpacked and passed as arguments to `func`. If False, the
-                parameters will be passed as a dict/tuple. If None, it will be automatically determined and raise an error
-                if it cannot be determined.
+                parameters will be passed as a dict/tuple. If None, it will be automatically determined by the first
+                applicable rule in this list:
+                - If `params` is a `ZFitParameter` pack it into a list and `unpack_params = True`
+                - If `func` has a parameter named `params` then `unpack_params = False`
+                - If `func` has exactly 1 positional parameter then `unpack_params = False`
+                - If `func` has more positional arguments than the number of `params` then `unpack_params = True`
+                - If `func` takes no parameters then  `unpack_params = False`
+                - Unable to decide, raise ValueError
             dependents:
                 .. deprecated:: unknown
                     use `params` instead.
